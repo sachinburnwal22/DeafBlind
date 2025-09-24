@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deaf-Blind Swar</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap");
+
+      body {
+        font-family: "Orbitron", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #eef2f3, #d9e4f5);
+        color: #111;
+      }
+
+      .header {
+        margin: 30px 0 10px 0;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent; /* fallback */
+        text-shadow: 0px 0px 15px rgba(106, 17, 203, 0.5);
+        margin: 0;
+      }
+
+      .header p {
+        font-size: 18px;
+        color: #06d6a0;
+        font-weight: bold;
+      }
+
+      .chatContainer {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px 0;
+      }
+
+      .chatBox {
+        flex: 1;
+        min-height: 400px;
+        padding: 15px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .chatBoxLabel {
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #fff;
+        display: inline-block;
+        align-self: center;
+      }
+
+      #realWorldChatBox .chatBoxLabel {
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+      }
+
+      #blindChatBox .chatBoxLabel {
+        background: linear-gradient(90deg, #06d6a0, #1b9aaa);
+      }
+
+      .message {
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        font-size: 16px;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .person1 {
+        border-left: 5px solid #6a11cb;
+      }
+
+      .person2 {
+        border-left: 5px solid #06d6a0;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .inputContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+        padding: 15px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      #messageInput {
+        flex: 1;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        background: rgba(240, 240, 240, 0.9);
+      }
+
+      #languageSelect {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 14px;
+        background: #eaf2f8;
+        cursor: pointer;
+      }
+
+      #sendBtn {
+        padding: 12px 18px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      #sendBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 5px 12px rgba(106, 17, 203, 0.4);
+      }
+
+      #status {
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 10px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>DEAF-BLIND SWAR</h1>
+      <p>⚡ Auto TTS → Auto Listen ⚡</p>
+    </div>
+
+    <div class="chatContainer">
+      <div id="realWorldChatBox" class="chatBox">
+        <div class="chatBoxLabel">VOCALLY IMPAIRED</div>
+      </div>
+      <div id="blindChatBox" class="chatBox">
+        <div class="chatBoxLabel">VISUALLY IMPAIRED</div>
+      </div>
+    </div>
+
+    <div class="inputContainer">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Type your message here..."
+      />
+      <select id="languageSelect">
+        <option value="en-US">English (US)</option>
+        <option value="es-ES">Spanish (ES)</option>
+        <option value="fr-FR">French (FR)</option>
+        <option value="de-DE">German (DE)</option>
+        <option value="hi-IN">Hindi (IN)</option>
+      </select>
+      <button id="sendBtn">SEND</button>
+      <span id="status">● Ready</span>
+    </div>
+
+    <script>
+      const realWorldChatBox = document.getElementById("realWorldChatBox");
+      const blindChatBox = document.getElementById("blindChatBox");
+      const messageInput = document.getElementById("messageInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const languageSelect = document.getElementById("languageSelect");
+      const statusEl = document.getElementById("status");
+
+      let recognition;
+      let recognizing = false;
+
+      function appendMessage(box, person, message) {
+        const msg = document.createElement("div");
+        msg.classList.add("message", person === 1 ? "person1" : "person2");
+        msg.textContent = `Person ${person}: ${message}`;
+        box.appendChild(msg);
+        box.scrollTop = box.scrollHeight;
+      }
+
+      function speakMessage(message, language, callback) {
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = language;
+        utterance.onend = () => callback && callback();
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function setupSpeechRecognition() {
+        if (!("webkitSpeechRecognition" in window)) {
+          alert("Speech recognition is not supported in this browser.");
+          return;
+        }
+
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => {
+          recognizing = true;
+          statusEl.textContent = "🎤 Listening...";
+          statusEl.style.color = "green";
+        };
+
+        recognition.onend = () => {
+          recognizing = false;
+          statusEl.textContent = "● Ready";
+          statusEl.style.color = "#333";
+        };
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          if (transcript) {
+            appendMessage(blindChatBox, 2, transcript);
+            appendMessage(realWorldChatBox, 2, transcript);
+
+            const lang = languageSelect.value;
+            speakMessage(transcript, lang, () => recognition.start());
+          }
+        };
+
+        recognition.onerror = (event) => {
+          console.error("Speech recognition error:", event.error);
+          statusEl.textContent = "⚠ Error: " + event.error;
+          statusEl.style.color = "red";
+        };
+      }
+
+      // Common send function (for button click + Enter key)
+      function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        const lang = languageSelect.value;
+        appendMessage(realWorldChatBox, 1, message);
+
+        speakMessage(message, lang, () => recognition.start());
+        messageInput.value = "";
+      }
+
+      sendBtn.addEventListener("click", sendMessage);
+
+      // 🔑 Handle Enter key press
+      messageInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault(); // Prevents newline
+          sendMessage();
+        }
+      });
+
+      setupSpeechRecognition();
+    </script>
+  </body>
+</html>
